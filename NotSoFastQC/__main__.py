@@ -11,7 +11,7 @@ def get_options():
 
 
 def main():
-    print("This is NotSoFastQC!")
+    print("This is NotSoFastQC!!")
 
 
 if __name__ == '__main__':
