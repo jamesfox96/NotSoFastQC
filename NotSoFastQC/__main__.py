@@ -4,7 +4,7 @@ import argparse
 def get_options():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-I', '--input', required=False, help="input FastQC file path")
+    parser.add_argument('-I', '--inut', required=False, help="input FastQC file path")
     parser.add_argument('-O', '--output', required=False, help="output directory path")
     parser.add_argument('-A', '--all', required=False, action='store_true',
                         help="Generates reports for all QC report modules")
