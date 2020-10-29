@@ -10,17 +10,17 @@ def get_options():
                         help="Generates reports for all QC report modules")
     parser.add_argument('-M', '--modules', required=False,
                         help='Input the QC report modules of your choice, separated by a comma \',\':'
-                             '\n\t1 - Per base sequence quality score'
-                             '\n\t2 - Per tile sequence quality'
-                             '\n\t3 - Per sequence quality scores'
-                             '\n\t4 - Per base sequence content'
-                             '\n\t5 - Per sequence GC content'
-                             '\n\t6 - Per base N content'
-                             '\n\t7 - Sequence Length Distribution'
-                             '\n\t8 - Sequence Duplication Levels'
-                             '\n\t9 - Overrepresented sequences'
-                             '\n\t10 - Adapter Content'
-                             '\n\t11 - K-mer Content'
+                             '\r\t1 - Per base sequence quality score'
+                             '\r\t2 - Per tile sequence quality'
+                             '\r\t3 - Per sequence quality scores'
+                             '\r\t4 - Per base sequence content'
+                             '\r\t5 - Per sequence GC content'
+                             '\r\t6 - Per base N content'
+                             '\r\t7 - Sequence Length Distribution'
+                             '\r\t8 - Sequence Duplication Levels'
+                             '\r\t9 - Overrepresented sequences'
+                             '\r\t10 - Adapter Content'
+                             '\r\t11 - K-mer Content'
                         )
     return parser.parse_args()
 
