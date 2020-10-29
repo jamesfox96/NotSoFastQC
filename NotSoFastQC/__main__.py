@@ -4,11 +4,11 @@ import argparse
 def get_options():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-I', '--inut', required=False, help="input FastQC file path")
-    parser.add_argument('-O', '--output', required=False, help="output directory path")
-    parser.add_argument('-A', '--all', required=False, action='store_true',
+    parser.add_argument('-I', required=False, help="input FastQC file path")
+    parser.add_argument('-O', required=False, help="output directory path")
+    parser.add_argument('--all', required=False, action='store_true',
                         help="Generates reports for all QC report modules")
-    parser.add_argument('-M', '--modules', required=False,
+    parser.add_argument('-M', required=False,
                         help='Input the QC report modules of your choice, separated by a comma \',\':'
                              '\r\t1 - Per base sequence quality score'
                              '\r\t2 - Per tile sequence quality'
