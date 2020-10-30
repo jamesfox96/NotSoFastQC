@@ -1,10 +1,8 @@
 import argparse
 import os
-from NotSoFastQC.utils import colours
-
-EXIT_MESSAGE = '''\n===========================
-                  \nINPUT ERROR: EXITING...
-                  \n==========================='''
+from NotSoFastQC.utils import TerminalLog as log
+from NotSoFastQC.utils import FastQCManager, basic_statistics
+from NotSoFastQC.modules import module_dict as md
 
 
 def get_options():
@@ -14,8 +12,8 @@ def get_options():
     parser.add_argument('-O', required=True, help="output directory path")
     parser.add_argument('--all', required=False, action='store_true',
                         help="Generates reports for all QC report modules")
-    parser.add_argument('-M', required=False, nargs='*', default=[],
-                        help='Input the QC report modules of your choice separated by a space')
+    parser.add_argument('-M', required=False, nargs='*', default=[], type=int,
+                        help='Input the QC report module keys of your choice separated by a space')
     return parser.parse_args()
 
 
@@ -27,13 +25,13 @@ def validate_file(filename):
         with open(path, 'r') as f:
             header = f.readline()
             if header.startswith("##FastQC"):
-                print(f"{colours.CYAN}Valid FastQC file: ", path, f"{colours.END}")
+                log.confirm("Valid FastQC file: " + path)
                 return path
 
-            print(f"\n{colours.FAIL}", path, "\tFile is not FastQC format! ", EXIT_MESSAGE, f"{colours.END}")
+            log.fail("\n" + path + "\nFile is not FastQC format!")
 
     except IOError:
-        print(f"\n{colours.FAIL}", path, "\nFile does not exist!", EXIT_MESSAGE, f"{colours.END}")
+        log.fail("\n" + path + "\nFile does not exist!")
 
     exit()
 
@@ -43,31 +41,53 @@ def validate_dir(directory):
     path = os.path.abspath(directory)
 
     if os.path.isdir(path):
-        print(f"{colours.CYAN}Valid output directory: ", path, f"{colours.END}")
+        log.confirm("Valid output directory: " + path)
         return path
 
-    print(f"\n{colours.FAIL}", path, "\nDirectory does not exist!", EXIT_MESSAGE, f"{colours.END}")
+    log.fail("\n" + path + "\nDirectory does not exist!")
     exit()
+
+
+def validate_modules(modules):
+
+    valid_modules = []
+    invalid_count = 0
+
+    for module in modules:
+        if module in md.keys():
+            log.confirm("Module added - " + md.get(module))
+            valid_modules.append(module)
+        else:
+            log.warning("INVALID MODULE KEY - '" + str(module) + "'")
+            invalid_count += 1
+
+    log.notify("Found " + str(invalid_count) + " invalid module key/s.")
+    if invalid_count > 0:
+        log.notify("\tConsult documentation for help on module keys.")
+
+    return valid_modules
 
 
 def main():
 
-    print("This is NotSoFastQC!")
-
     args = get_options()
 
-    if args.all is False:
-        print("all = False")
-        for arg in args.M:
-            print(arg)
-    else:
-        print("all = True")
-        args.M = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        for arg in args.M:
-            print(arg)
+    log.bold("\n\nThis is NotSoFastQC!\n\tCreated by James Fox\n\n")
 
+    log.notify("CONFIRMING INPUTS...")
     fastqc = validate_file(args.I)
-    dir = validate_dir(args.O)
+    directory = validate_dir(args.O)
+
+    if args.all is False:
+        modules = validate_modules(args.M)
+    else:
+        modules = md.keys()
+        log.confirm("All available modules added.")
+
+    if len(modules) > 0:
+        FastQCManager(fastqc, directory, modules)
+
+    basic_statistics(fastqc)
 
 
 if __name__ == '__main__':
