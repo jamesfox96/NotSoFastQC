@@ -1,9 +1,14 @@
 from NotSoFastQC.modules import module_dict as md
-import os
 import re
 from tabulate import tabulate
+from platform import system
 
-os.system("color")
+if "wind" in system().lower():
+    print(system())
+    from ctypes import windll
+    k = windll.kernel32
+    k.SetConsoleMode(k.GetStdHandle(-11), 7)
+
 
 EXIT_MESSAGE = '''\n===========================
                   \nINPUT ERROR: EXITING...
