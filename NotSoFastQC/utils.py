@@ -3,7 +3,7 @@ import re
 from tabulate import tabulate
 from platform import system
 
-if "win" in system().lower():
+if "wind" in system().lower():
     try:
         from ctypes import windll
         kernel32 = windll.kernel32
