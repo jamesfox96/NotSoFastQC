@@ -1,6 +1,9 @@
 from NotSoFastQC.modules import module_dict as md
+import os
 import re
 from tabulate import tabulate
+
+os.system("color")
 
 EXIT_MESSAGE = '''\n===========================
                   \nINPUT ERROR: EXITING...
