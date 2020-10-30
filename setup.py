@@ -10,4 +10,4 @@ setup(name='NotSoFastQC',
       packages=['NotSoFastQC'],
       install_requires=['tabulate>=0.8.7'],
       entry_points={'console_scripts': ['NotSoFastQC=NotSoFastQC.__main__:main']},
-)
+      )

@@ -1,8 +1,8 @@
 import argparse
 import os
-from NotSoFastQC.utils import TerminalLog as log
-from NotSoFastQC.utils import FastQCManager, basic_statistics
+from NotSoFastQC.utils import TerminalLog as Log
 from NotSoFastQC.modules import module_dict as md
+from NotSoFastQC.fastqc_manager import FastQCManager
 
 
 def get_options():
@@ -25,13 +25,13 @@ def validate_file(filename):
         with open(path, 'r') as f:
             header = f.readline()
             if header.startswith("##FastQC"):
-                log.confirm("Valid FastQC file: " + path)
+                Log.confirm("Valid FastQC file: " + path)
                 return path
 
-            log.fail("\n" + path + "\nFile is not FastQC format!")
+            Log.fail("\n" + path + "\nFile is not FastQC format!")
 
     except IOError:
-        log.fail("\n" + path + "\nFile does not exist!")
+        Log.fail("\n" + path + "\nFile does not exist!")
 
     exit()
 
@@ -41,10 +41,10 @@ def validate_dir(directory):
     path = os.path.abspath(directory)
 
     if os.path.isdir(path):
-        log.confirm("Valid output directory: " + path)
+        Log.confirm("Valid output directory: " + path)
         return path
 
-    log.fail("\n" + path + "\nDirectory does not exist!")
+    Log.fail("\n" + path + "\nDirectory does not exist!")
     exit()
 
 
@@ -55,26 +55,24 @@ def validate_modules(modules):
 
     for module in modules:
         if module in md.keys():
-            log.confirm("Module added - " + md.get(module))
+            Log.confirm("Module added - [" + str(module) + "] " + md.get(module))
             valid_modules.append(module)
         else:
-            log.warning("INVALID MODULE KEY - '" + str(module) + "'")
+            Log.warning("INVALID MODULE KEY [" + str(module) + "] REMOVED")
             invalid_count += 1
 
-    log.notify("Found " + str(invalid_count) + " invalid module key/s.")
     if invalid_count > 0:
-        log.notify("\tConsult documentation for help on module keys.")
+        Log.warning("Found " + str(invalid_count) + " invalid module key/s.")
+        Log.notify("\tConsult documentation for help on module keys.")
+    else:
+        Log.confirm("Found no invalid module keys")
 
     return valid_modules
 
 
-def main():
+def run_validation(args):
 
-    args = get_options()
-
-    log.bold("\n\nThis is NotSoFastQC!\n\tCreated by James Fox\n\n")
-
-    log.notify("CONFIRMING INPUTS...")
+    Log.notify("CONFIRMING INPUTS...\n")
     fastqc = validate_file(args.I)
     directory = validate_dir(args.O)
 
@@ -82,14 +80,24 @@ def main():
         modules = validate_modules(args.M)
     else:
         modules = md.keys()
-        log.confirm("All available modules added.")
+        Log.confirm("All available modules added.")
 
-    if len(modules) > 0:
-        FastQCManager(fastqc, directory, modules)
+    Log.notify("VALIDATION COMPLETE...")
 
-    basic_statistics(fastqc)
+    return fastqc, directory, modules
+
+
+def main():
+
+    args = get_options()
+
+    Log.start()
+
+    validated_args = run_validation(args)
+    FastQCManager(validated_args)
+
+    Log.complete()
 
 
 if __name__ == '__main__':
     main()
-
