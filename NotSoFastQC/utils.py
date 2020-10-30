@@ -3,11 +3,14 @@ import re
 from tabulate import tabulate
 from platform import system
 
-if "wind" in system().lower():
-    print(system())
-    from ctypes import windll
-    k = windll.kernel32
-    k.SetConsoleMode(k.GetStdHandle(-11), 7)
+if "win" in system().lower():
+    try:
+        from ctypes import windll
+        kernel32 = windll.kernel32
+        kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
+    except ImportError:
+        print("\nImport error whilst attempting to import module[windll]. This should not cause a problem"
+              " if using unix-based platforms. Contact author for help")
 
 
 EXIT_MESSAGE = '''\n===========================
