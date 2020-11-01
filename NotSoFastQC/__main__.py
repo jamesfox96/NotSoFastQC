@@ -14,6 +14,8 @@ def get_options():
                         help="Generates reports for all QC report modules")
     parser.add_argument('-M', required=False, nargs='*', default=[], type=int,
                         help='Input the QC report module keys of your choice separated by a space')
+    parser.add_argument('-D', required=False, default=False, action='store_true',
+                        help="Determine whether you want to overwrite existing files in output directory")
     return parser.parse_args()
 
 
@@ -82,7 +84,7 @@ def run_validation(args):
         modules = md.keys()
         Log.confirm("All available modules added.")
 
-    Log.notify("VALIDATION COMPLETE...")
+    Log.notify("VALIDATION COMPLETE...\n\n")
 
     return fastqc, directory, modules
 
@@ -94,7 +96,7 @@ def main():
     Log.start()
 
     validated_args = run_validation(args)
-    FastQCManager(validated_args)
+    FastQCManager(validated_args, args.D)
 
     Log.complete()
 

@@ -44,7 +44,7 @@ class TerminalLog:
         print(Colours.FAIL,
               message,
               '''\n\n===========================================================
-                   \n                  INPUT ERROR: EXITING...
+                   \n                     ERROR: EXITING...
                    \n===========================================================''',
               Colours.END)
 
