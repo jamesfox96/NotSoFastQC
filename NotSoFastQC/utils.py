@@ -1,5 +1,6 @@
 from platform import system
 
+# Checks if operating system is Windows as formatting for text doesn't work in Windows without windll.
 if "wind" in system().lower():
     try:
         from ctypes import windll
@@ -12,6 +13,7 @@ if "wind" in system().lower():
 
 
 class Colours:
+    """Enum-styled selection of text formats"""
 
     BOLD = '\033[1m'
     NOTIFY = '\033[36m'
@@ -22,6 +24,7 @@ class Colours:
 
 
 class TerminalLog:
+    """Prints styled text to console"""
 
     @staticmethod
     def bold(message):
