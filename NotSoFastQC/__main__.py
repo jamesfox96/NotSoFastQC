@@ -1,3 +1,4 @@
+import sys
 import argparse
 import os
 from NotSoFastQC.utils import TerminalLog as Log
@@ -6,6 +7,7 @@ from NotSoFastQC.fastqc_manager import FastQCManager
 
 
 def get_options():
+    """Returns user command line inputs"""
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-I', required=True, help="input FastQC file path")
@@ -20,12 +22,16 @@ def get_options():
 
 
 def validate_file(filename):
+    """Return validated path of input FastQC file
+    Will exit program if invalid file found or invalid path.
+    """
 
     path = os.path.abspath(filename)
 
     try:
         with open(path, 'r') as f:
             header = f.readline()
+            # Weak validation, but checks if first line follows FastQC file format
             if header.startswith("##FastQC"):
                 Log.confirm("Valid FastQC file: " + path)
                 return path
@@ -35,27 +41,34 @@ def validate_file(filename):
     except IOError:
         Log.fail("\n" + path + "\nFile does not exist!")
 
-    exit()
+    sys.exit(10)
 
 
 def validate_dir(directory):
+    """Return validated path of input directory
+    Will exit program if invalid directory path found.
+    """
 
     path = os.path.abspath(directory)
 
+    # If path exists
     if os.path.isdir(path):
         Log.confirm("Valid output directory: " + path)
         return path
 
     Log.fail("\n" + path + "\nDirectory does not exist!")
-    exit()
+    sys.exit(20)
 
 
 def validate_modules(modules):
+    """Return validated module choices as a list, with Basic Statistics automatically added."""
 
-    valid_modules = []
+    # Automatically puts Basic Statistics in modules, so report is always generated
+    valid_modules = ["BS"]
     invalid_count = 0
 
     for module in modules:
+        # If valid module
         if module in md.keys():
             Log.confirm("Module added - [" + str(module) + "] " + md.get(module))
             valid_modules.append(module)
@@ -73,11 +86,13 @@ def validate_modules(modules):
 
 
 def run_validation(args):
+    """Return validated list of FastQC file, directory path and module choices."""
 
     Log.notify("CONFIRMING INPUTS...\n")
     fastqc = validate_file(args.I)
     directory = validate_dir(args.O)
 
+    # Overrides manually selected modules if --all is selected
     if args.all is False:
         modules = validate_modules(args.M)
     else:
@@ -90,6 +105,7 @@ def run_validation(args):
 
 
 def main():
+    """Runs NotSoFastQC."""
 
     args = get_options()
 
