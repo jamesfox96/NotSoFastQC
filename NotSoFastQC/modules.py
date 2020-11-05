@@ -1,4 +1,7 @@
-module_dict = {1:  "Per base sequence quality",
+# Dictionary of available modules. Can be added to anytime and code will still work.
+# Would require graph generation methods in FastQCManager if graph output was needed.
+module_dict = {"BS": "Basic Statistics",
+               1:  "Per base sequence quality",
                2:  "Per tile sequence quality",
                3:  "Per sequence quality scores",
                4:  "Per base sequence content",
@@ -8,5 +11,5 @@ module_dict = {1:  "Per base sequence quality",
                8:  "Sequence Duplication Levels",
                9:  "Overrepresented sequences",
                10: "Adapter Content",
-               11: "K-mer Content",
+               11: "Kmer Content",
                }
