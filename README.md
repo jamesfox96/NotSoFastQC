@@ -3,7 +3,12 @@ This package is designed to generate imitation reports for each module in the Fa
 filter text and QC report text files and selected modules generate graphs that mimic those seen in FastQC.
 
 ### Installation
-NotSoFastQC can be installed from my [github repository](https://github.com/jamesfox96/NotSoFastQC), 
+The simplest way to install NotSoFastQC is through pip:
+```sh
+pip install NotSoFastQC
+```
+
+NotSoFastQC can also be installed from my [github repository](https://github.com/jamesfox96/NotSoFastQC), 
 either by following the link or using git:
 ```sh
 git clone https://github.com/jamesfox96/NotSoFastQC
