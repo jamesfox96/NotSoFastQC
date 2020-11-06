@@ -48,7 +48,14 @@ class FastQCManager:
 
             self.data = self.pull_data(self.module_name)
             self.write_reports()
-            self.switch_graph(module)
+
+            # For some reason graph generation doesn't work in terminal but does in PyCharm... can't figure this out.
+            # I know it is exclusively to do with sns.lineplot() (based on console output), but works fine in my IDE?
+            # With longer deadline, I think this could be fixed by altering code, but will probably take time.
+            try:
+                self.switch_graph(module)
+            except IndexError:
+                Log.warning("Graph cannot be made, this problem is recognised.")
 
         self.show_basic_statistics()
 
@@ -573,7 +580,7 @@ class FastQCManager:
         """Creates table of Basic Statistics to display to console window."""
 
         data = self.pull_data("Basic Statistics")
-        header = data[HEADER]
+        header = data[HEADER][0]
         rows = data[ROWS]
 
         Log.notify("\nBasic Statistics:\n")
