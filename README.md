@@ -1,5 +1,5 @@
 # NotSoFastQC
-This package is deigned to generate imitation reports for each module in the FastQC tool. All modules create
+This package is designed to generate imitation reports for each module in the FastQC tool. All modules create
 filter text and QC report text files and selected modules generate graphs that mimic those seen in FastQC.
 
 ### Installation
